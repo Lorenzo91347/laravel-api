@@ -8,12 +8,13 @@
 
     <!-- Form Start -->
 
-    <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.projects.store', ) }}" method="POST" enctype="multipart/form-data">
         <!--CSRF token -->
+        <!-- n.b. the name filed in the input must be present or the form will not send the chosen data -->
         @csrf
         <div class="mb-3">
             <label for="title" class="form-label text-warning">Project Name</label>
-            <input type="text" class="form-control" id="title" aria-describedby="title" value="{{ old('title') }}">
+            <input type="text" name="title" class="form-control" id="title" aria-describedby="title" value="{{ old('title') }}">
         </div>
         <div class="mb-3">
             <label for="description" class="form-label text-warning">Description</label>
@@ -31,21 +32,11 @@
         <label for="technology" class="form-label text-warning">Technology</label>
         <div class="mb-3">
             @foreach ($technologies as $tech)
-                @if ($errors->any())
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="tech-{{ $tech->id }}"
-                            value="{{ $tech->id }}" name="technologies"
-                            {{ $technologies->contain($tech->id) ? 'checked' : '' }}>
-                        <label class="form-check-label text-warning" for="tech-{{ $tech->id }}">{{ $tech->title }}</label>
-                    </div>
-                @else
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="tech-{{ $tech->id }}"
-                            value="{{ $tech->id }}" name="technologies"
-                            {{ in_array($tech->id, old('technologies', [])) ? 'checked' : '' }}>
-                        <label class="form-check-label text-warning" for="tech-{{ $tech->id }}">{{ $tech->title }}</label>
-                    </div>
-                @endif
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" value="{{ $tech->id }}" name="technologies[]"
+                    id="tech-{{ $tech->id }}" {{ in_array($tech->id, old('technologies', [])) ? 'checked' : '' }}>
+                <label class="form-check-label text-warning" for="technologies-{{ $tech->id }}">{{ $tech->title }}</label>
+            </div>
         @endforeach
         </div>
 

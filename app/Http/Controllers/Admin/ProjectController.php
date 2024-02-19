@@ -41,8 +41,6 @@ class ProjectController extends Controller
 
         $data = $request->validated();
 
-        dd($data);
-
         $project = new Project();
 
         $project->fill($data);
@@ -52,15 +50,16 @@ class ProjectController extends Controller
         if (isset($data['post_image'])) {
             $project->post_image = Storage::put('uploads', $data['post_image']);
         }
+
+        $project->save();
+
         if (isset($data['technologies'])) {
             $project->technologies()->sync($data['technologies']);
         };
 
-        $project->save();
 
 
-
-        return redirect()->route('admin.projects.show');
+        return redirect()->route('admin.projects.show', $project->id);
     }
 
     /**
