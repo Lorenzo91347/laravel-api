@@ -15,8 +15,8 @@ class ProjectController extends Controller
         ]);
 
         if (request()->key) {
-            $projects = Project::where('title', 'LIKE', '%', request()->key, '%')
-                ->orWhere('content', 'LIKE', '%', request()->key, '%')
+            $projects = Project::where('title', 'LIKE', '%' . request()->key . '%')
+                ->orWhere('content', 'LIKE', '%' . request()->key . '%')
                 ->paginate(3);
         } else {
             $projects = Project::paginate(3);
