@@ -22,12 +22,17 @@ class ProjectController extends Controller
             $projects = Project::paginate(3);
         };
 
-
-
-        return response()->json([
-            'success' => true,
-            'results' => $projects
-        ]);
+        if ($projects) {
+            return response()->json([
+                'success' => true,
+                'results' => $projects
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'results' => []
+            ]);
+        }
     }
     public function show(string $slug)
     {
